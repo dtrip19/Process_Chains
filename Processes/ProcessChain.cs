@@ -1,46 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Processes
 {
     public class ProcessChain
     {
-        public static event Action<ProcessChain> OnProcessComplete;
+        public event Action<ProcessChain> OnProcessComplete;
 
-        public List<SubProcess> subProcesses;
-        private bool hasLooped;
+        public SubProcess[] subProcesses;
+        private bool started;
 
         public ProcessChain()
         {
-            subProcesses = new List<SubProcess>();
             Program.OnUpdate += Loop;
             OnProcessComplete += DestroyProcess;
         }
 
         private void Loop()
         {
-            hasLooped = true;
+            if (!started) return;
 
-            for (int i = 0; i < subProcesses.Count; i++)
+            for (int i = 0; i < subProcesses.Length; i++)
             {
-                if (subProcesses[i] == null || subProcesses[i].Equals(null))
-                {
-                    subProcesses.RemoveAt(i);
-                    return;
-                }
-
-                if (!subProcesses[i].Invoke())
+                if (subProcesses[i] != null && !subProcesses[i].Equals(null) && !subProcesses[i].Invoke())
                     return;
 
-                if (i == subProcesses.Count - 1)
+                if (i == subProcesses.Length - 1)
                     OnProcessComplete?.Invoke(this);
             }
         }
 
-        public void IterateRemotely() //Allows Iterate to be called remotely once separate from the Update loop to get things going immediately after initializing
+        public void Start()
         {
-            if (!hasLooped)
-                Loop();
+            if (started) return;
+
+            started = true;
+            Loop();
         }
 
         private static void DestroyProcess(ProcessChain process)
