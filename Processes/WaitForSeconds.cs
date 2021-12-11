@@ -18,7 +18,7 @@ namespace Processes
                 firstTime = false;
             }
 
-            var timeSinceStart = (float)(DateTime.Now - startTime).TotalSeconds;
+            var timeSinceStart = (DateTime.Now - startTime).TotalSeconds;
             if (timeSinceStart > seconds)
                 return true;
             else
