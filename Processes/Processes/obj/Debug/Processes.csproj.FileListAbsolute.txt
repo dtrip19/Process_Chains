@@ -1,0 +1,7 @@
+C:\Users\Derek\source\repos\Processes\Processes\obj\Debug\Processes.csproj.AssemblyReference.cache
+C:\Users\Derek\source\repos\Processes\Processes\obj\Debug\Processes.csproj.CoreCompileInputs.cache
+C:\Users\Derek\source\repos\Processes\Processes\bin\Debug\Processes.exe.config
+C:\Users\Derek\source\repos\Processes\Processes\bin\Debug\Processes.exe
+C:\Users\Derek\source\repos\Processes\Processes\bin\Debug\Processes.pdb
+C:\Users\Derek\source\repos\Processes\Processes\obj\Debug\Processes.exe
+C:\Users\Derek\source\repos\Processes\Processes\obj\Debug\Processes.pdb
