@@ -19,7 +19,7 @@ namespace Processes
             }
 
             var timeSinceStart = (DateTime.Now - startTime).TotalSeconds;
-            if (timeSinceStart > seconds)
+            if (timeSinceStart >= seconds)
                 return true;
             else
                 return false;
