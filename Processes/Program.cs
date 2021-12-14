@@ -4,8 +4,9 @@ namespace Processes
 {
     public class Test : Processor
     {
+        public event Action CloseProgram;
+
         int num = 5;
-        string name = "name";
 
         public void SomeFunction()
         {
@@ -13,7 +14,13 @@ namespace Processes
             {
                 new DoOnce(() => Console.WriteLine("The number of processes on Test object is " + processes.Count)),
                 new DoOnce(() => Console.WriteLine("The number is " + num)),
-                new DoOnUpdate(5, () => Console.WriteLine("The name is " + name))
+                new DoOnce(() => num++),
+                new DoOnce(() => Console.WriteLine("The number is " + num)),
+                new DoOnce(() => num++),
+                new DoOnce(() => Console.WriteLine("The number is " + num)),
+                new DoOnce(() => num++),
+                new WaitForSeconds(5),
+                new DoOnce(() => CloseProgram?.Invoke())
             }));
         }
     }
@@ -28,6 +35,7 @@ namespace Processes
             Test test = new Test();
 
             test.SomeFunction();
+            test.CloseProgram += () => loop = false;
 
             while (loop)
             {
