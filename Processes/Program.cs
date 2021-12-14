@@ -5,7 +5,7 @@ namespace Processes
     public class Test : Processor
     {
         int num = 5;
-        string name = "hehe";
+        string name = "name";
 
         public void SomeFunction()
         {
