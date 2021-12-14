@@ -1,31 +1,36 @@
-﻿using System;
-
+﻿
 namespace Processes
 {
-    public class ProcessChain
+    public sealed class ProcessChain //Process Chains can be started by calling Processor.StartProcess and passing in the result of the ProcessChain.CreateProcess method
     {
-        public event Action<ProcessChain> OnProcessComplete;
-
-        public SubProcess[] subProcesses;
+        public Process[] processes { get; private set; }
+        public string name { get; private set; }
         private bool started;
 
-        public ProcessChain()
+        private ProcessChain(string name, Process[] processes)
         {
+            this.name = name;
+            this.processes = processes;
             Program.OnUpdate += Loop;
-            OnProcessComplete += DestroyProcess;
+        }
+
+        public static ProcessChain CreateProcess(string name, Process[] processes)
+        {
+            ProcessChain newProcess = new ProcessChain(name, processes);
+            return newProcess;
         }
 
         private void Loop()
         {
             if (!started) return;
 
-            for (int i = 0; i < subProcesses.Length; i++)
+            for (int i = 0; i < processes.Length; i++)
             {
-                if (subProcesses[i] != null && !subProcesses[i].Equals(null) && !subProcesses[i].Invoke())
+                if (processes[i] != null && !processes[i].Equals(null) && !processes[i].Invoke())
                     return;
 
-                if (i == subProcesses.Length - 1)
-                    OnProcessComplete?.Invoke(this);
+                if (i == processes.Length - 1)
+                    Destroy(this);
             }
         }
 
@@ -37,13 +42,13 @@ namespace Processes
             Loop();
         }
 
-        private static void DestroyProcess(ProcessChain process)
+        private void Destroy(ProcessChain process)
         {
             process = null;
         }
     }
 
-    public abstract class SubProcess
+    public abstract class Process
     {
         public abstract bool Invoke();
     }
