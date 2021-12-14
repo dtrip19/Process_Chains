@@ -11,7 +11,7 @@ namespace Processes
         public override bool Invoke()
         {
             if (action != null && !action.Equals(null) && !hasBeenInvoked)
-                action.Invoke();
+                action();
 
             hasBeenInvoked = true;
             return true;
