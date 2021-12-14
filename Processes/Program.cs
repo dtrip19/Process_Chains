@@ -12,16 +12,17 @@ namespace Processes
         {
             StartProcess(ProcessChain.CreateProcess("name", new Process[]
             {
-                new DoOnce(() => Console.WriteLine("The number of processes on Test object is " + processes.Count)),
                 new DoOnce(() => Console.WriteLine("The number is " + num)),
                 new DoOnce(() => num++),
-                new DoOnce(() => Console.WriteLine("The number is " + num)),
-                new DoOnce(() => num++),
-                new DoOnce(() => Console.WriteLine("The number is " + num)),
-                new DoOnce(() => num++),
+                new DoOnUpdate(-1, () => {  num--; OtherFunction(); }, new Func<bool>(() => { return num > 0; })),
                 new WaitForSeconds(5),
                 new DoOnce(() => CloseProgram?.Invoke())
             }));
+        }
+
+        private void OtherFunction()
+        {
+            Console.WriteLine("num has been reduced by 1, num is now " + num);
         }
     }
 
