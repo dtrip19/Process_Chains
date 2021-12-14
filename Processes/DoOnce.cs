@@ -2,7 +2,8 @@
 
 namespace Processes
 {
-    class DoOnce : SubProcess
+    //Performs an action without interrupting the process chain
+    public sealed class DoOnce : Process
     {
         private bool hasBeenInvoked = false;
         private Action action;
