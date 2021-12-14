@@ -2,7 +2,7 @@
 
 namespace Processes
 {
-    //Interupts the process chain until a specified amount of seconds have passed since the chain first reached this subprocess
+    //Interupts the process chain until a specified amount of seconds has passed since the chain first reached this process
     public sealed class WaitForSeconds : Process
     {
         bool firstTime = true;
