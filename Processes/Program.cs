@@ -2,6 +2,22 @@
 
 namespace Processes
 {
+    public class Test : Processor
+    {
+        int num = 5;
+        string name = "hehe";
+
+        public void SomeFunction()
+        {
+            StartProcess(ProcessChain.CreateProcess("name", new Process[]
+            {
+                new DoOnce(() => Console.WriteLine("The number of processes on Test object is " + processes.Count)),
+                new DoOnce(() => Console.WriteLine("The number is " + num)),
+                new DoOnUpdate(5, () => Console.WriteLine("The name is " + name))
+            }));
+        }
+    }
+
     public class Program
     {
         public static event Action OnUpdate;
@@ -9,26 +25,9 @@ namespace Processes
         static void Main()
         {
             bool loop = true;
+            Test test = new Test();
 
-            ProcessChain process2 = new ProcessChain() { subProcesses = new SubProcess[]
-            {
-                new DoOnce(() => Console.WriteLine("Process2 started")),
-                new WaitForSeconds(5),
-                new DoOnUpdate(5, () => Console.WriteLine("On update action performed in process2")),
-                new WaitForSeconds(5),
-                new DoOnce(() => Console.WriteLine("Process2 ended"))
-            }};
-
-            ProcessChain process1 = new ProcessChain() { subProcesses = new SubProcess[]
-            {
-                new DoOnce(() => Console.WriteLine("Process1 started")),
-                new WaitForSeconds(5),
-                new DoOnce(() => process2.Start()),
-                new DoOnce(() => Console.WriteLine("Process 1 ended"))
-            }};
-
-            process1.Start();
-            process2.OnProcessComplete += new Action<ProcessChain>((ProcessChain process) => loop = false);
+            test.SomeFunction();
 
             while (loop)
             {
