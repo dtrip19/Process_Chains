@@ -4,7 +4,7 @@ namespace Processes
 {
     public abstract class Processor //Have anything you want to be able to use processes derive from this
     {
-        public List<ProcessChain> processes;
+        private List<ProcessChain> processes;
 
         public void StartProcess(ProcessChain process)
         {
@@ -12,6 +12,7 @@ namespace Processes
                 processes = new List<ProcessChain>();
 
             processes.Add(process);
+            process.OnProcessComplete += RemoveProcessFromList;
             process.Start();
         }
 
@@ -20,7 +21,10 @@ namespace Processes
             for (int i = processes.Count - 1; i >= 0; i--)
             {
                 if (processToEnd != string.Empty && processes[i] != null && !processes[i].Equals(null) && processes[i].name.Equals(processToEnd))
+                {
                     processes[i] = null;
+                    processes.RemoveAt(i);
+                }
             }
         }
 
@@ -28,8 +32,20 @@ namespace Processes
         {
             for (int i = 0; i < processes.Count; i++)
             {
-                if (processes[i] != null && !processes[i].Equals(null))
+                if (processes[0] != null && !processes[0].Equals(null))
+                {
                     processes[i] = null;
+                    processes.RemoveAt(0);
+                }
+            }
+        }
+
+        void RemoveProcessFromList(ProcessChain process)
+        {
+            for (int i = 0; i < processes.Count; i++)
+            {
+                if (processes[i].Equals(process))
+                    processes.RemoveAt(i);
             }
         }
     }

@@ -1,8 +1,10 @@
-﻿
+﻿using System;
+
 namespace Processes
 {
     public sealed class ProcessChain //Process Chains can be started by calling Processor.StartProcess and passing in the result of the ProcessChain.CreateProcess method
     {
+        public event Action<ProcessChain> OnProcessComplete;
         public Process[] processes { get; private set; }
         public string name { get; private set; }
         private bool started;
@@ -12,6 +14,7 @@ namespace Processes
             this.name = name;
             this.processes = processes;
             Program.OnUpdate += Loop;
+            OnProcessComplete += Destroy;
         }
 
         public static ProcessChain CreateProcess(string name, Process[] processes)
@@ -30,7 +33,7 @@ namespace Processes
                     return;
 
                 if (i == processes.Length - 1)
-                    Destroy(this);
+                    OnProcessComplete?.Invoke(this);
             }
         }
 
